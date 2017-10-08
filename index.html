@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>大小写转换</title>
+  <style>
+    body,textarea,p,div,input {
+      margin: 0;
+      padding: 0;
+    }
+
+    p,textarea {
+      opacity: 1;
+      display: block;
+      width: 90%;
+      max-width: 1100px;
+      min-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+    }
+    textarea {
+      height: 300px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    div{
+      margin: 10px auto;
+      max-width: 1100px;
+      min-width: 400px;
+      width: 90%;
+    }
+    input {
+      border: 0 none;
+      outline: none;
+    }
+    input {
+      border: 1px solid #111;
+      padding:3px;
+      font-weight: 500;
+    }
+    .btnL2U {
+      background: #1E9FFF;
+    }
+    .btnU2L {
+      background: #1E9FFF;
+    }
+    .clsLow {
+      background: #FF5722;
+    }
+    .clsUp {
+      background: #FF5722;
+    }
+    .clsAll {
+      background: #f00;
+      color: #fff;
+    }
+    .current {
+      background: #5FB878;
+    }
+    span {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <p>小写区域</p>
+  <textarea name="" id="lowTextarea"></textarea>
+
+  <div>
+    <input type="button" value="小写转为大写↓" id="btnL2U" class="btnL2U">
+    <input type="button" value="大写转为小写↑" id="btnU2L" class="btnU2L">
+    
+    <input type="button" value="清空小写区域" id="clsLow" class="clsLow">
+    <input type="button" value="清空大写区域" id="clsUp" class="clsUp">
+    <input type="button" value="清空全部区域" id="clsAll" class="clsAll">
+  </div>
+  <div>
+    <input type="button" value="增大字号" id="changLg">
+    <input type="button" value="减小字号" id="changSm">
+    <input type="button" value="增大透明度" id="changOpLg">
+    <input type="button" value="减小透明度" id="changOpSm">
+    <input type="button" value="字体红色" id="red">
+    <input type="button" value="字体恢复" id="black">
+    <span>选一个颜色</span><input type="color" id="selectColor">
+  </div>
+  <p>大写区域</p>
+  <textarea name="" id="upTextarea"></textarea>
+  <p>加油,一起努力!</p>
+  <script>
+  window.onload = function () {
+
+    var lowTextarea = document.getElementById('lowTextarea');
+    var btnL2U = document.getElementById('btnL2U');
+    var btnU2L = document.getElementById('btnU2L');
+    var upTextarea = document.getElementById('upTextarea');
+    var inputArr = document.getElementsByTagName('input');
+    var oldClass = "";      
+
+    for(var i = 0; i < inputArr.length; i++){
+      addEvent("mouseover",inputArr[i],inputArrOver);
+      addEvent("mouseout",inputArr[i],inputArrOut);
+
+      function inputArrOver() {       
+        oldClass = this.getAttribute("class");
+          this.setAttribute("class",oldClass +" current");
+        }
+      function inputArrOut() {        
+        this.setAttribute("class",oldClass);
+      }
+    }
+    addEvent("click",btnL2U,btnL2U1);
+    addEvent("click",btnU2L,btnL2U2);
+    function btnL2U1() {
+      if(lowTextarea.value == ''){
+        alert("哎呀,大写区域差点被覆盖,小写区域无内容");
+        return false;
+      }
+      upTextarea.value = lowTextarea.value.toUpperCase();
+    }
+    function btnL2U2() {
+      if(upTextarea.value == ''){
+        alert("哎呀,小写区域差点被覆盖,大写区域无内容");
+        return false;
+      }
+      lowTextarea.value = upTextarea.value.toLowerCase();
+    }
+    var clsLow = document.getElementById('clsLow');
+    var clsUp = document.getElementById('clsUp');
+    var clsAll = document.getElementById('clsAll');
+    addEvent("click",clsLow,fnL);
+    function fnL() {  
+      if(lowTextarea.value == ''){alert("小写区域无内容");return false;}
+
+      var com = confirm("你真的确定吗?此操作不可逆转");
+      if(com){
+        if(lowTextarea.value == ''){alert("小写区域无内容")} 
+        lowTextarea.value = '';
+      }else {
+        return false;
+      }
+    }
+    addEvent("click",clsUp,fnU);
+    function fnU() {
+      if(upTextarea.value == ''){alert("大写区域无内容");return false;}
+      var com = confirm("你真的确定吗?此操作不可逆转");
+      if(com){
+        if(upTextarea.value == ''){alert("大写区域无内容")}
+        upTextarea.value = '';
+      }else {
+        return false;
+      }
+    
+    }
+    addEvent("click",clsAll,fnAll);
+
+    function fnAll() {  
+      var com = false;
+      if((!lowTextarea.value == '') && (!upTextarea.value == '')){
+        com = confirm("两个区域均存在内容,是否清空?此操作不可逆转");      
+      }else if(!lowTextarea.value == ''){
+        com = confirm("小写区域存在内容?是否继续清空");
+      }else if(!upTextarea.value == '') {
+        com = confirm("大写区域存在内容?是否继续清空");
+      }else if((lowTextarea.value == '') && (upTextarea.value == '')){
+        alert("两个区域均无任何内容,无需清除");
+      }
+      if(com){
+        lowTextarea.value = '';
+        upTextarea.value = '';
+      }else {
+        return false;
+      }
+       
+    }
+
+      var changLg = document.getElementById("changLg");
+      var changSm = document.getElementById("changSm");
+
+      var changOpLg = document.getElementById("changOpLg");
+      var changOpSm = document.getElementById("changOpSm");
+      addEvent("click",changLg,fnLg);
+      addEvent("click",changSm,fnSm);
+      addEvent("click",changOpLg,fnOpLg);
+      addEvent("click",changOpSm,fnOpSm);
+      var count = 1;
+      function fnLg(){
+        count += 0.5;
+        changeFZ(lowTextarea);
+        changeFZ(upTextarea);
+      }
+      function fnSm(){
+        count -= 0.5;
+
+        changeFZ(lowTextarea);
+        changeFZ(upTextarea);
+      }
+      function changeFZ(textareaFz){
+        if(count <= 0){
+          count = 0.1;
+          alert("字号再小你都看不清啦");
+        }
+        textareaFz.style.fontSize = count * 12 + "px";
+      }
+
+      var countOp = 0.8;
+      function fnOpLg(){
+        countOp += 0.1;
+        changeOpFZ(lowTextarea);
+        changeOpFZ(upTextarea);
+      }
+      function fnOpSm(){
+        countOp -= 0.1;
+        changeOpFZ(lowTextarea);
+        changeOpFZ(upTextarea);
+      }
+      function changeOpFZ(textareaFz){
+        if(countOp <= 0.2){
+          countOp = 0.2;
+          alert("透明度再小你都看不清字啦");
+          textareaFz.style.color = "#000";
+
+        }
+        if(countOp>=1){
+          countOp = 1;        
+        }
+        textareaFz.style.opacity = countOp * 1;
+        textareaFz.style.filter = "alpha(opacity="+countOp * 100+")" ;
+      }
+
+
+
+
+
+      // 双向数据绑定
+      function addEvent(event,elem,fn) {  
+          if(elem.addEventListener){  
+              elem.addEventListener(event,fn,false);  
+          }else if (elem.attachEvent){  
+              elem.attachEvent('on'+event,fn);  
+          }else{  
+              elem['on'+event]=fn;  
+          }  
+      }  
+      function bindText() {
+        addEvent("change",lowTextarea,fn1LowTextarea);
+        addEvent("change",upTextarea,fn2UpTextarea);
+        addEvent("input",lowTextarea,fn3LowTextarea);
+        addEvent("input",upTextarea,fn4UpTextarea);
+        addEvent("change",lowTextarea,fn5LowTextarea);
+        addEvent("change",upTextarea,fn6UpTextarea);
+        function fn1LowTextarea() {
+          upTextarea.value = this.value.toUpperCase();
+        }
+        function fn2UpTextarea() {
+          lowTextarea.value = this.value.toLowerCase();
+        }
+        function fn3LowTextarea() {
+          upTextarea.value = this.value.toUpperCase();
+        }
+        function fn4UpTextarea() {
+          lowTextarea.value = this.value.toLowerCase();
+        }
+        function fn5LowTextarea() {
+          upTextarea.value = this.value.toUpperCase();
+        }
+        function fn6UpTextarea() {
+          lowTextarea.value = this.value.toLowerCase();
+        }
+
+      }
+      bindText();
+      // 字体改为红色
+      var redText = document.getElementById("red");
+      var blackText = document.getElementById("black");
+      addEvent("click",redText,fnRedText);
+      addEvent("click",blackText,fnBlackText);
+      function fnRedText () {
+        upTextarea.style.color = "#f00";
+        lowTextarea.style.color = "#f00";
+      }
+      function fnBlackText () {
+        upTextarea.style.color = "#000";
+        lowTextarea.style.color = "#000";
+      }
+
+      var selectColor = document.getElementById("selectColor");
+      addEvent("change",selectColor,fnSelectColor);
+      function fnSelectColor () {
+        upTextarea.style.color = selectColor.value;
+        lowTextarea.style.color = selectColor.value;
+
+      }
+  }
+    
+  </script>
+</body>
+</html>
+
